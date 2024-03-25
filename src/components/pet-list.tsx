@@ -5,13 +5,13 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 
 export default function PetList() {
-  const {pets} = usePetContext()
+  const {pets, handleChangeSelectedPetId} = usePetContext()
 
   return (
     <ul className="border-light border-b bg-white">
       {pets.map((pet) => (
         <li key={pet.id}>
-          <button
+          <button onClick={() => handleChangeSelectedPetId(pet.id)}
             className={cn(
               "flex h-[70px] w-full cursor-pointer items-center gap-3 px-5 text-base transition hover:bg-[#EFF1F2] focus:bg-[#EFF1F2]",
               {},
