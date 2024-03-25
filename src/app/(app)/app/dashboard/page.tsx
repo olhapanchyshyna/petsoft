@@ -6,7 +6,14 @@ import PetList from '@/components/pet-list'
 import SearchForm from '@/components/search-form'
 import Stats from "@/components/stats";
 
-export default function Page() {
+export default async function Page() {
+	const response = await fetch("https://bytegrad.com/course-assets/projects/petsoft/api/pets")
+
+	if(!response.ok){
+		throw new Error('Coud not fetch pets')
+	}
+	const data = await response.json()
+
   return (
     <main>
       <div className="flex items-center justify-between py-8 text-white">
@@ -22,7 +29,7 @@ export default function Page() {
 
         <div className="relative md:col-span-1 md:col-start-1 md:row-span-full md:row-start-2">
           <ContentBlock>
-            <PetList />
+            <PetList pets={data}/>
 
             <div className="absolute bottom-4 right-4">
               <PetButton/>
