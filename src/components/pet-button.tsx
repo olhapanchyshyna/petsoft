@@ -54,7 +54,7 @@ export default function PetButton({
         </DialogHeader>
 
         <PetForm
-          buttonText={actionType === "add" ? "Add pet" : "Save changes"}
+          actionType={actionType}
           onFormSubmission={()=> setIsFormOpen(false)}
         />
       </DialogContent>
