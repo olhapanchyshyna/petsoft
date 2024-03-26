@@ -7,7 +7,12 @@ import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import { usePetContext } from '@/lib/hooks'
 
-export default function PetForm({ buttonText }: { buttonText: string }) {
+type PetFormProps = {
+	buttonText: string,
+	onFormSubmission: () => void
+}
+
+export default function PetForm({ buttonText, onFormSubmission }: PetFormProps) {
 
 	const {handleAddPet} = usePetContext()
 
@@ -24,6 +29,7 @@ export default function PetForm({ buttonText }: { buttonText: string }) {
 		}
 
 		handleAddPet(newPet)
+		onFormSubmission()
 	}
 
   return (
