@@ -1,7 +1,7 @@
 "use client";
 
+import { addPet } from "@/actions/actions";
 import { usePetContext } from "@/lib/hooks";
-import { FormEvent } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
@@ -16,33 +16,33 @@ export default function PetForm({
   actionType,
   onFormSubmission,
 }: PetFormProps) {
-  const { selectedPet, handleAddPet, handleEditPet } = usePetContext();
+  const { selectedPet } = usePetContext();
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  // const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
 
-    const formData = new FormData(e.currentTarget);
-    const pet = {
-      name: formData.get("name") as string,
-      ownerName: formData.get("ownerName") as string,
-      imageUrl:
-        (formData.get("imageUrl") as string) ||
-        "https://bytegrad.com/course-assets/react-nextjs/pet-placeholder.png",
-      age: +(formData.get("age") as string),
-      notes: formData.get("notes") as string,
-    };
+  //   const formData = new FormData(e.currentTarget);
+  //   const pet = {
+  //     name: formData.get("name") as string,
+  //     ownerName: formData.get("ownerName") as string,
+  //     imageUrl:
+  //       (formData.get("imageUrl") as string) ||
+  //       "https://bytegrad.com/course-assets/react-nextjs/pet-placeholder.png",
+  //     age: +(formData.get("age") as string),
+  //     notes: formData.get("notes") as string,
+  //   };
 
-		if(actionType === "edit"){
-			handleEditPet(selectedPet?.id as string, pet)
-		}else if(actionType === "add"){
-			handleAddPet(pet);
-		}
-    
-    onFormSubmission();
-  };
+  // 	if(actionType === "edit"){
+  // 		handleEditPet(selectedPet?.id as string, pet)
+  // 	}else if(actionType === "add"){
+  // 		handleAddPet(pet);
+  // 	}
+
+  //   onFormSubmission();
+  // };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col space-y-3">
+    <form action={addPet} className="flex flex-col space-y-3">
       <div className="space-y-3">
         <div className="items-center space-y-1">
           <Label htmlFor="name" className="text-right">
