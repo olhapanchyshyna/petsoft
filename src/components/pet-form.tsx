@@ -7,6 +7,7 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import PetFormBtn from './pet-form-btn'
+import { toast } from 'sonner'
 
 type PetFormProps = {
   actionType: string;
@@ -44,8 +45,12 @@ export default function PetForm({
 
   return (
     <form
-      action={(formData) => {
-        addPet(formData);
+      action={async (formData) => {
+        const error = await addPet(formData);
+        if(error){
+          toast.warning(error.message)
+          return
+        }
         onFormSubmission();
       }}
       className="flex flex-col space-y-3"
