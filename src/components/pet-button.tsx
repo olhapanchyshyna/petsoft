@@ -14,12 +14,14 @@ import {
 
 type PetButtonProps = {
   actionType: "add" | "edit" | "checkout";
+  disabled? : boolean
   children?: ReactNode;
   onClick?: () => void;
 };
 
 export default function PetButton({
   actionType,
+  disabled,
   onClick,
   children,
 }: PetButtonProps) {
@@ -28,7 +30,7 @@ export default function PetButton({
 
   if (actionType === "checkout") {
     return (
-      <Button variant="secondary" onClick={onClick}>
+      <Button variant="secondary" disabled={disabled} onClick={onClick}>
         {children}
       </Button>
     );
