@@ -42,7 +42,13 @@ export default function PetForm({
   // };
 
   return (
-    <form action={addPet} className="flex flex-col space-y-3">
+    <form
+      action={(formData) => {
+        addPet(formData);
+        onFormSubmission();
+      }}
+      className="flex flex-col space-y-3"
+    >
       <div className="space-y-3">
         <div className="items-center space-y-1">
           <Label htmlFor="name" className="text-right">
