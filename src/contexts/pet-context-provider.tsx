@@ -49,22 +49,22 @@ export default function PetContextProvider({
   };
 
   const handleEditPet = (petId: string, newPet: Omit<Pet, "id">) => {
-    setPets((prev) =>
-      prev.map((pet) => {
-        if (pet.id === petId) {
-          return {
-            id: petId,
-            ...newPet,
-          };
-        }
-        return pet;
-      }),
-    );
+    // setPets((prev) =>
+    //   prev.map((pet) => {
+    //     if (pet.id === petId) {
+    //       return {
+    //         id: petId,
+    //         ...newPet,
+    //       };
+    //     }
+    //     return pet;
+    //   }),
+    // );
   };
 
   const handleCheckoutPet = (id: string) => {
-    setPets((prev) => prev.filter((pet) => pet.id !== id));
-    setSelectedPetId(null);
+    // setPets((prev) => prev.filter((pet) => pet.id !== id));
+    // setSelectedPetId(null);
   };
 
   const handleChangeSelectedPetId = (id: string) => {

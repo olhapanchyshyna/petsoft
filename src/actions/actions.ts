@@ -17,10 +17,35 @@ export async function addPet(formData: any) {
       },
     });
   } catch (error) {
-		return{
-			message: "Could not add pet"
-		}
-	}
+    return {
+      message: "Could not add pet",
+    };
+  }
+
+  revalidatePath("/app", "layout");
+}
+
+export async function editPet(petId: string, newPetData: any) {
+  try {
+    await prisma.pet.update({
+      where: {
+        id: petId,
+      },
+      data: {
+        name: newPetData.get("name"),
+        ownerName: newPetData.get("ownerName"),
+        imageUrl:
+          newPetData.get("imageUrl") ||
+          "https://bytegrad.com/course-assets/react-nextjs/pet-placeholder.png",
+        age: +newPetData.get("age"),
+        notes: newPetData.get("notes"),
+      },
+    });
+  } catch (error) {
+    return {
+      message: "Could not edit pet",
+    };
+  }
 
   revalidatePath("/app", "layout");
 }
