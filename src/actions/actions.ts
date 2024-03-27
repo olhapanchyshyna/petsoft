@@ -3,7 +3,7 @@
 import prisma from "@/lib/db";
 import { revalidatePath } from 'next/cache'
 
-export async function addPet(formData) {
+export async function addPet(formData: any) {
   await prisma.pet.create({
     data: {
       name: formData.get("name"),
