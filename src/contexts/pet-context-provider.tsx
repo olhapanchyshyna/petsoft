@@ -1,7 +1,9 @@
 "use client";
 
 import { addPet, deletePet, editPet } from "@/actions/actions";
-import { Pet } from "@/lib/types";
+import { PetEssential } from "@/lib/types";
+import { Pet } from "@prisma/client";
+
 import { ReactNode, createContext, useOptimistic, useState } from "react";
 import { toast } from "sonner";
 
@@ -12,13 +14,13 @@ type PetContextProviderProps = {
 
 type TPetContext = {
   pets: Pet[];
-  selectedPetId: string | null;
+  selectedPetId: Pet["id"] | null;
   selectedPet: Pet | undefined;
   numberOfPets: number;
-  handleAddPet: (formData: Omit<Pet, "id">) => Promise<void>;
-  handleEditPet: (petData: Omit<Pet, "id">, petId: string) => Promise<void>;
-  handleCheckoutPet: (id: string) => Promise<void>;
-  handleChangeSelectedPetId: (id: string) => void;
+  handleAddPet: (formData: PetEssential) => Promise<void>;
+  handleEditPet: (petData: PetEssential, petId: Pet["id"]) => Promise<void>;
+  handleCheckoutPet: (id: Pet["id"]) => Promise<void>;
+  handleChangeSelectedPetId: (id: Pet["id"]) => void;
 };
 
 export const PetContext = createContext<TPetContext | null>(null);
@@ -56,7 +58,7 @@ export default function PetContextProvider({
 
   // event handlers / actions
 
-  const handleAddPet = async (petData: Omit<Pet, "id">) => {
+  const handleAddPet = async (petData: PetEssential) => {
     setOptimisticPets({ action: "add", data: petData });
     const error = await addPet(petData);
     if (error) {
@@ -65,7 +67,7 @@ export default function PetContextProvider({
     }
   };
 
-  const handleEditPet = async (petData: Omit<Pet, "id">, petId: string) => {
+  const handleEditPet = async (petData: PetEssential, petId: Pet["id"]) => {
     setOptimisticPets({ action: "edit", data: { id: petId, petData } });
     const error = await editPet(petData, petId);
     if (error) {
@@ -74,7 +76,7 @@ export default function PetContextProvider({
     }
   };
 
-  const handleCheckoutPet = async (id: string) => {
+  const handleCheckoutPet = async (id: Pet["id"]) => {
     setOptimisticPets({ action: "delete", data: id });
     const error = await deletePet(id);
     if (error) {
@@ -84,7 +86,7 @@ export default function PetContextProvider({
     setSelectedPetId(null);
   };
 
-  const handleChangeSelectedPetId = (id: string) => {
+  const handleChangeSelectedPetId = (id: Pet["id"]) => {
     setSelectedPetId(id);
   };
 
