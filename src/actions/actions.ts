@@ -3,7 +3,7 @@
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
-export async function addPet(pet) {
+export async function addPet(pet: any) {
   try {
     await prisma.pet.create({
       data: pet
@@ -17,7 +17,7 @@ export async function addPet(pet) {
   revalidatePath("/app", "layout");
 }
 
-export async function editPet(newPetData, petId: string, ) {
+export async function editPet(newPetData: any, petId: string, ) {
   try {
     await prisma.pet.update({
       where: {
