@@ -1,6 +1,7 @@
 "use client";
 
 import { usePetContext } from "@/lib/hooks";
+import { useForm } from "react-hook-form";
 import PetFormBtn from "./pet-form-btn";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
@@ -10,6 +11,13 @@ type PetFormProps = {
   actionType: string;
   onFormSubmission: () => void;
 };
+type TPetForm = {
+  name: string;
+  ownerName: string;
+  imageUrl: string;
+  age: number;
+  notes: string;
+};
 
 export default function PetForm({
   actionType,
@@ -17,28 +25,10 @@ export default function PetForm({
 }: PetFormProps) {
   const { selectedPet, handleAddPet, handleEditPet } = usePetContext();
 
-  // const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-
-  //   const formData = new FormData(e.currentTarget);
-  //   const pet = {
-  //     name: formData.get("name") as string,
-  //     ownerName: formData.get("ownerName") as string,
-  //     imageUrl:
-  //       (formData.get("imageUrl") as string) ||
-  //       "https://bytegrad.com/course-assets/react-nextjs/pet-placeholder.png",
-  //     age: +(formData.get("age") as string),
-  //     notes: formData.get("notes") as string,
-  //   };
-
-  // 	if(actionType === "edit"){
-  // 		handleEditPet(selectedPet?.id as string, pet)
-  // 	}else if(actionType === "add"){
-  // 		handleAddPet(pet);
-  // 	}
-
-  //   onFormSubmission();
-  // };
+  const {
+    register,
+    formState: { errors },
+  } = useForm<TPetForm>();
 
   return (
     <form
@@ -68,12 +58,11 @@ export default function PetForm({
             Name
           </Label>
           <Input
+            {...register("name")}
             id="name"
-            name="name"
-            type="text"
-            required
             defaultValue={actionType === "edit" ? selectedPet?.name : ""}
           />
+          {errors.name && <p className="text-red-500">{errors.name.message}</p>}
         </div>
 
         <div className="items-center space-y-1">
@@ -81,12 +70,13 @@ export default function PetForm({
             Owner Name
           </Label>
           <Input
+            {...register("ownerName")}
             id="ownerName"
-            name="ownerName"
-            type="text"
-            required
             defaultValue={actionType === "edit" ? selectedPet?.ownerName : ""}
           />
+          {errors.ownerName && (
+            <p className="text-red-500">{errors.ownerName.message}</p>
+          )}
         </div>
 
         <div className="items-center space-y-1">
@@ -94,11 +84,13 @@ export default function PetForm({
             Image Url
           </Label>
           <Input
+            {...register("imageUrl")}
             id="imageUrl"
-            name="imageUrl"
-            type="text"
             defaultValue={actionType === "edit" ? selectedPet?.imageUrl : ""}
           />
+          {errors.imageUrl && (
+            <p className="text-red-500">{errors.imageUrl.message}</p>
+          )}
         </div>
 
         <div className="items-center space-y-1">
@@ -106,12 +98,11 @@ export default function PetForm({
             Age
           </Label>
           <Input
+            {...register("age")}
             id="age"
-            name="age"
-            type="number"
-            required
             defaultValue={actionType === "edit" ? selectedPet?.age : ""}
           />
+          {errors.age && <p className="text-red-500">{errors.age.message}</p>}
         </div>
 
         <div className="items-center space-y-1">
@@ -119,12 +110,14 @@ export default function PetForm({
             Notes
           </Label>
           <Textarea
+            {...register("notes")}
             id="notes"
-            name="notes"
             rows={3}
-            required
             defaultValue={actionType === "edit" ? selectedPet?.notes : ""}
           />
+          {errors.notes && (
+            <p className="text-red-500">{errors.notes.message}</p>
+          )}
         </div>
       </div>
 
