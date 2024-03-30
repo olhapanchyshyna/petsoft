@@ -1,23 +1,20 @@
 "use server";
 import prisma from "@/lib/db";
-import { PetEssential } from '@/lib/types'
-import { petFormSchema } from '@/lib/validations'
-import { Pet } from '@prisma/client'
+import { petFormSchema, petIdSchema } from "@/lib/validations";
 import { revalidatePath } from "next/cache";
 
 export async function addPet(pet: unknown) {
-
-  const validatedPet = petFormSchema.safeParse(pet)
-  if(!validatedPet.success){
-    return{
-      message: "Invalid pet data"
-    }
+  const validatedPet = petFormSchema.safeParse(pet);
+  if (!validatedPet.success) {
+    return {
+      message: "Invalid pet data",
+    };
   }
 
   try {
     await prisma.pet.create({
-      data: validatedPet.data
-    }); 
+      data: validatedPet.data,
+    });
   } catch (error) {
     return {
       message: "Could not add pet",
@@ -27,13 +24,22 @@ export async function addPet(pet: unknown) {
   revalidatePath("/app", "layout");
 }
 
-export async function editPet(newPetData: unknown, petId: unknown, ) {
+export async function editPet(newPetData: unknown, petId: unknown) {
+  const validatedPetId = petIdSchema.safeParse(petId);
+  const validatedPet = petFormSchema.safeParse(newPetData);
+
+  if (!validatedPet.success || !validatedPetId.success) {
+    return {
+      message: "Invalid pet data",
+    };
+  }
+
   try {
     await prisma.pet.update({
       where: {
-        id: petId,
+        id: validatedPetId.data,
       },
-      data: newPetData
+      data: validatedPet.data,
     });
   } catch (error) {
     return {
@@ -44,12 +50,20 @@ export async function editPet(newPetData: unknown, petId: unknown, ) {
   revalidatePath("/app", "layout");
 }
 
-export async function deletePet(petId: unknown,) {
+export async function deletePet(petId: unknown) {
+  const validatedPetId = petIdSchema.safeParse(petId);
+
+  if (!validatedPetId.success) {
+    return {
+      message: "Invalid pet data",
+    };
+  }
+
   try {
     await prisma.pet.delete({
       where: {
-        id: petId,
-      }
+        id: validatedPetId.data,
+      },
     });
   } catch (error) {
     return {

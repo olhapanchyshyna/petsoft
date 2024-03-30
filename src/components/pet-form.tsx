@@ -28,6 +28,13 @@ export default function PetForm({
     formState: { errors },
   } = useForm<TPetForm>({
     resolver: zodResolver(petFormSchema),
+    defaultValues: {
+      name: selectedPet?.name,
+      ownerName: selectedPet?.ownerName,
+      imageUrl: selectedPet?.imageUrl,
+      age: selectedPet?.age,
+      notes: selectedPet?.notes,
+    },
   });
 
   return (
@@ -59,7 +66,6 @@ export default function PetForm({
               required: "Name is required",
             })}
             id="name"
-            defaultValue={actionType === "edit" ? selectedPet?.name : ""}
           />
           {errors.name && <p className="text-red-500">{errors.name.message}</p>}
         </div>
@@ -68,11 +74,7 @@ export default function PetForm({
           <Label htmlFor="ownerName" className="text-right">
             Owner Name
           </Label>
-          <Input
-            {...register("ownerName")}
-            id="ownerName"
-            defaultValue={actionType === "edit" ? selectedPet?.ownerName : ""}
-          />
+          <Input {...register("ownerName")} id="ownerName" />
           {errors.ownerName && (
             <p className="text-red-500">{errors.ownerName.message}</p>
           )}
@@ -82,11 +84,7 @@ export default function PetForm({
           <Label htmlFor="imageUrl" className="text-right">
             Image Url
           </Label>
-          <Input
-            {...register("imageUrl")}
-            id="imageUrl"
-            defaultValue={actionType === "edit" ? selectedPet?.imageUrl : ""}
-          />
+          <Input {...register("imageUrl")} id="imageUrl" />
           {errors.imageUrl && (
             <p className="text-red-500">{errors.imageUrl.message}</p>
           )}
@@ -96,11 +94,7 @@ export default function PetForm({
           <Label htmlFor="age" className="text-right">
             Age
           </Label>
-          <Input
-            {...register("age")}
-            id="age"
-            defaultValue={actionType === "edit" ? selectedPet?.age : ""}
-          />
+          <Input {...register("age")} id="age" />
           {errors.age && <p className="text-red-500">{errors.age.message}</p>}
         </div>
 
@@ -108,12 +102,7 @@ export default function PetForm({
           <Label htmlFor="notes" className="text-right">
             Notes
           </Label>
-          <Textarea
-            {...register("notes")}
-            id="notes"
-            rows={3}
-            defaultValue={actionType === "edit" ? selectedPet?.notes : ""}
-          />
+          <Textarea {...register("notes")} id="notes" rows={3} />
           {errors.notes && (
             <p className="text-red-500">{errors.notes.message}</p>
           )}
