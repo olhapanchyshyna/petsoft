@@ -5,7 +5,7 @@ import { petFormSchema } from '@/lib/validations'
 import { Pet } from '@prisma/client'
 import { revalidatePath } from "next/cache";
 
-export async function addPet(pet: PetEssential) {
+export async function addPet(pet: unknown) {
 
   const validatedPet = petFormSchema.safeParse(pet)
   if(!validatedPet.success){
@@ -27,7 +27,7 @@ export async function addPet(pet: PetEssential) {
   revalidatePath("/app", "layout");
 }
 
-export async function editPet(newPetData: PetEssential, petId: Pet["id"], ) {
+export async function editPet(newPetData: unknown, petId: unknown, ) {
   try {
     await prisma.pet.update({
       where: {
@@ -44,7 +44,7 @@ export async function editPet(newPetData: PetEssential, petId: Pet["id"], ) {
   revalidatePath("/app", "layout");
 }
 
-export async function deletePet(petId: string,) {
+export async function deletePet(petId: unknown,) {
   try {
     await prisma.pet.delete({
       where: {
