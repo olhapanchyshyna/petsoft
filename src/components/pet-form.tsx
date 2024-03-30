@@ -13,13 +13,8 @@ type PetFormProps = {
   actionType: string;
   onFormSubmission: () => void;
 };
-type TPetForm = {
-  name: string;
-  ownerName: string;
-  imageUrl: string;
-  age: number;
-  notes: string;
-};
+type TPetForm = z.infer<typeof petFormShema>
+
 
 const petFormShema = z.object({
   name: z.string().trim().min(1, { message: "Name is required" }).max(100),
