@@ -27,13 +27,19 @@ export default function PetForm({
 
   const {
     register,
+    trigger,
     formState: { errors },
   } = useForm<TPetForm>();
 
   return (
     <form
       action={async (formData) => {
+
+        const result = await trigger()
+        if(!result) return;
+
         onFormSubmission();
+
         const petData = {
           name: formData.get("name") as string,
           ownerName: formData.get("ownerName") as string,
@@ -58,7 +64,9 @@ export default function PetForm({
             Name
           </Label>
           <Input
-            {...register("name")}
+            {...register("name", {
+              required: 'Name is required',
+            })}
             id="name"
             defaultValue={actionType === "edit" ? selectedPet?.name : ""}
           />
@@ -70,7 +78,9 @@ export default function PetForm({
             Owner Name
           </Label>
           <Input
-            {...register("ownerName")}
+            {...register("ownerName", {
+              required: 'Owner name is required',
+            })}
             id="ownerName"
             defaultValue={actionType === "edit" ? selectedPet?.ownerName : ""}
           />
@@ -98,7 +108,9 @@ export default function PetForm({
             Age
           </Label>
           <Input
-            {...register("age")}
+            {...register("age", {
+              required: 'Age is required',
+            })}
             id="age"
             defaultValue={actionType === "edit" ? selectedPet?.age : ""}
           />
@@ -110,7 +122,9 @@ export default function PetForm({
             Notes
           </Label>
           <Textarea
-            {...register("notes")}
+            {...register("notes", {
+              required: 'Notes is required',
+            })}
             id="notes"
             rows={3}
             defaultValue={actionType === "edit" ? selectedPet?.notes : ""}
