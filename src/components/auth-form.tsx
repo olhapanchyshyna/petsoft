@@ -5,7 +5,7 @@ import { Label } from "./ui/label";
 type AuthFormProps = {
   type: "signUp" | "logIn";
 };
-
+ 
 export default function AuthForm({ type }: AuthFormProps) {
   return (
     <form>
