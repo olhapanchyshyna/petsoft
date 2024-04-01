@@ -8,7 +8,7 @@ const config = {
 	callbacks: {
 		authorized: ({request}) =>{
 			const isTryingToAccessApp = request.nextUrl.pathname.includes("/app")
-			
+
 			if(isTryingToAccessApp){
 				return false
 			}else{
@@ -19,5 +19,5 @@ const config = {
 } satisfies NextAuthConfig
 
 
-export const {auth} = NextAuth(config)
+export const {auth, signIn} = NextAuth(config)
 
