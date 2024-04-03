@@ -1,5 +1,6 @@
 import ContentBlock from "@/components/content-block";
 import H1 from "@/components/h1";
+import SignOutBtn from '@/components/sign-out-btn'
 import { auth } from "@/lib/auth";
 
 export default async function page() {
@@ -12,10 +13,10 @@ export default async function page() {
 
       <ContentBlock className="flex h-[500px] flex-col items-center justify-center gap-3">
         <p>
-          Logged in as <span className='font-semibold'>{session.user.email}</span>
+          Logged in as <span className='font-medium'>{session.user.email}</span>
         </p>
 
-        {/* <SignOutBtn /> */}
+        <SignOutBtn />
       </ContentBlock>
     </main>
   );
