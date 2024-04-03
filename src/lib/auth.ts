@@ -3,7 +3,6 @@ import NextAuth, { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import prisma from "./db";
 
-
 const config = {
   pages: {
     signIn: "/login",
@@ -39,12 +38,19 @@ const config = {
     }),
   ],
   callbacks: {
-    authorized: ({ request }) => {
+    authorized: ({ auth, request }) => {
+      const isLoggedIn = Boolean(auth?.user);
       const isTryingToAccessApp = request.nextUrl.pathname.includes("/app");
 
-      if (isTryingToAccessApp) {
+      if (!isLoggedIn && isTryingToAccessApp) {
         return false;
-      } else {
+      }
+
+      if (isLoggedIn && isTryingToAccessApp) {
+        return true;
+      }
+
+      if (!isTryingToAccessApp) {
         return true;
       }
     },
