@@ -2,18 +2,35 @@
 import { signIn, signOut } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { petFormSchema, petIdSchema } from "@/lib/validations";
+import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 
 // ----------- user actions -----------
 
 export async function logIn(formhData: FormData) {
-  const authData = Object.fromEntries(formhData.entries());
+  await signIn("credentials", formhData);
 
-  await signIn("credentials", authData);
+  revalidatePath("/app/dashboard");
 }
 
 export async function logOut() {
   await signOut({ redirectTo: "/" });
+}
+
+export async function signUp(formhData: FormData) {
+  const hashedPassword = await bcrypt.hash(
+    formhData.get("password") as string,
+    10,
+  );
+
+  await prisma.user.create({
+    data: {
+      email: formhData.get("email") as string,
+      hashedPassword,
+    },
+  });
+
+  await signIn("credentials", formhData);
 }
 
 // ----------- pet actions -----------
