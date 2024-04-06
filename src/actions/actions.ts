@@ -141,11 +141,3 @@ export async function deletePet(petId: unknown) {
 
   revalidatePath("/app", "layout");
 }
-
-function checkFormDataType(formhData: unknown) {
-  if (!(formhData instanceof FormData)) {
-    return {
-      message: "Invalid form data",
-    };
-  }
-}
