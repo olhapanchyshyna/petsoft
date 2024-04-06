@@ -1,8 +1,7 @@
 import bcrypt from "bcryptjs";
 import NextAuth, { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import prisma from "./db";
-import { getUserByEmail } from './server-utils'
+import { getUserByEmail } from "./server-utils";
 
 const config = {
   pages: {
@@ -13,7 +12,7 @@ const config = {
       async authorize(credentials) {
         const { email, password } = credentials;
 
-        const user = await getUserByEmail(email)
+        const user = await getUserByEmail(email);
 
         if (!user) {
           console.log("No user found");
@@ -73,4 +72,9 @@ const config = {
   },
 } satisfies NextAuthConfig;
 
-export const { auth, signIn, signOut } = NextAuth(config);
+export const {
+  auth,
+  signIn,
+  signOut,
+  handlers: { GET, POST },
+} = NextAuth(config);
