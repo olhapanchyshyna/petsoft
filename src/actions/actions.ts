@@ -2,14 +2,14 @@
 import { signIn, signOut } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { checkAuth, getPetById } from "@/lib/server-utils";
-import { petFormSchema, petIdSchema } from "@/lib/validations";
+import { authSchema, petFormSchema, petIdSchema } from "@/lib/validations";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 
 // ----------- user actions -----------
 
 export async function logIn(formhData: unknown) {
-  if(!(formhData instanceof FormData)) {
+  if (!(formhData instanceof FormData)) {
     return {
       message: "Invalid form data",
     };
@@ -23,20 +23,35 @@ export async function logOut() {
   await signOut({ redirectTo: "/" });
 }
 
-export async function signUp(formhData: FormData) {
-  const hashedPassword = await bcrypt.hash(
-    formhData.get("password") as string,
-    10,
-  );
+export async function signUp(formData: unknown) {
+  if (!(formData instanceof FormData)) {
+    return {
+      message: "Invalid form data.",
+    };
+  }
+
+  // convert formData to a plain object
+  const formDataEntries = Object.fromEntries(formData.entries());
+
+  // validation
+  const validatedFormData = authSchema.safeParse(formDataEntries);
+  if (!validatedFormData.success) {
+    return {
+      message: "Invalid form data.",
+    };
+  }
+
+  const { email, password } = validatedFormData.data;
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   await prisma.user.create({
     data: {
-      email: formhData.get("email") as string,
+      email,
       hashedPassword,
     },
   });
 
-  await signIn("credentials", formhData);
+  await signIn("credentials", formData);
 }
 
 // ----------- pet actions -----------
@@ -125,4 +140,12 @@ export async function deletePet(petId: unknown) {
   }
 
   revalidatePath("/app", "layout");
+}
+
+function checkFormDataType(formhData: unknown) {
+  if (!(formhData instanceof FormData)) {
+    return {
+      message: "Invalid form data",
+    };
+  }
 }
