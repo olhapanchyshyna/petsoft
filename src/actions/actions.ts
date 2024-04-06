@@ -8,7 +8,12 @@ import { revalidatePath } from "next/cache";
 
 // ----------- user actions -----------
 
-export async function logIn(formhData: FormData) {
+export async function logIn(formhData: unknown) {
+  if(!(formhData instanceof FormData)) {
+    return {
+      message: "Invalid form data",
+    };
+  }
   await signIn("credentials", formhData);
 
   revalidatePath("/app/dashboard");
