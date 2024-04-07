@@ -11,7 +11,6 @@ const config = {
   providers: [
     Credentials({
       async authorize(credentials) {
-
         // validation
         const validatedFormData = authSchema.safeParse(credentials);
         if (!validatedFormData.success) {
@@ -54,7 +53,13 @@ const config = {
       }
 
       if (isLoggedIn && !isTryingToAccessApp) {
-        return Response.redirect(new URL("/app/dashboard", request.nextUrl));
+        if (
+          request.nextUrl.pathname.includes("/login") ||
+          request.nextUrl.pathname.includes("/signup")
+        ) {
+          return Response.redirect(new URL("/payment", request.nextUrl));
+        }
+        return true
       }
 
       if (!isLoggedIn && !isTryingToAccessApp) {
