@@ -14,7 +14,7 @@ export default function SignOutBtn() {
         startTransition(async () => {
           await logOut();
         })
-      }
+      } 
     >
       Sign Out
     </Button>
