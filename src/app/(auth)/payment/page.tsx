@@ -5,7 +5,11 @@ import H1 from "@/components/h1";
 import { Button } from "@/components/ui/button";
 import { useTransition } from "react";
 
-export default function Page({ searchParams }) {
+type TSearchParams = {
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export default function Page({ searchParams }: TSearchParams) {
   const [isPending, startTransition] = useTransition();
 
   return (
