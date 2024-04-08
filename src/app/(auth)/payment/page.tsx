@@ -13,7 +13,7 @@ type TSearchParams = {
 
 export default function Page({ searchParams }: TSearchParams) {
   const [isPending, startTransition] = useTransition();
-  const { update } = useSession();
+  const { data:session ,update, status } = useSession();
 	const router = useRouter();
 
   return (
@@ -37,6 +37,7 @@ export default function Page({ searchParams }: TSearchParams) {
       {searchParams.success && (
         <>
           <Button
+					disabled={status === "loading" || session?.user.hasAccess}
             onClick={async () => {
               await update(true);
 							router.push("/app/dashboard");
