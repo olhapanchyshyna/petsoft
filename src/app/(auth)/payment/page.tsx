@@ -3,6 +3,8 @@
 import { createCheckoutSession } from "@/actions/actions";
 import H1 from "@/components/h1";
 import { Button } from "@/components/ui/button";
+import { useSession } from "next-auth/react";
+import { useRouter } from 'next/navigation'
 import { useTransition } from "react";
 
 type TSearchParams = {
@@ -11,6 +13,8 @@ type TSearchParams = {
 
 export default function Page({ searchParams }: TSearchParams) {
   const [isPending, startTransition] = useTransition();
+  const { update } = useSession();
+	const router = useRouter();
 
   return (
     <main className="flex flex-col items-center space-y-10">
@@ -31,9 +35,19 @@ export default function Page({ searchParams }: TSearchParams) {
       )}
 
       {searchParams.success && (
-        <p className="text-sm text-green-700">
-          Payment successful! You now have lifetime access to PetSoft.
-        </p>
+        <>
+          <Button
+            onClick={async () => {
+              await update(true);
+							router.push("/app/dashboard");
+            }}
+          >
+            Access PetSoft
+          </Button>
+          <p className="text-sm text-green-700">
+            Payment successful! You now have lifetime access to PetSoft.
+          </p>
+        </>
       )}
 
       {searchParams.canceled && (
