@@ -1,5 +1,5 @@
 "use server";
-import { signIn, signOut } from "@/lib/auth";
+import { signIn, signOut } from "@/lib/auth-no-edge";
 import prisma from "@/lib/db";
 import { checkAuth, getPetById } from "@/lib/server-utils";
 import { authSchema, petFormSchema, petIdSchema } from "@/lib/validations";
@@ -195,7 +195,6 @@ export async function createCheckoutSession() {
     mode: "payment",
     success_url: `${process.env.CANONICAL_URL}/payment?success=true`,
     cancel_url: `${process.env.CANONICAL_URL}/payment?canceled=true`,
-
   });
 
   redirect(checkoutSession.url);

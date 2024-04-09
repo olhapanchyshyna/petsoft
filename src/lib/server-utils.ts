@@ -1,15 +1,15 @@
-import "server-only"
-import { redirect } from 'next/navigation'
-import { auth } from './auth'
+import { Pet, User } from "@prisma/client";
+import { redirect } from "next/navigation";
+import "server-only";
+import { auth } from "./auth-no-edge";
 import prisma from "./db";
-import { Pet, User } from '@prisma/client'
 
 export async function checkAuth() {
   const session = await auth();
   if (!session?.user) {
     redirect("/login");
   }
-	return session
+  return session;
 }
 
 export async function getPetById(petId: Pet["id"], session: string) {
@@ -19,7 +19,7 @@ export async function getPetById(petId: Pet["id"], session: string) {
     },
   });
 
-	if (!pet) {
+  if (!pet) {
     return {
       message: "Pet not found",
     };
@@ -29,7 +29,7 @@ export async function getPetById(petId: Pet["id"], session: string) {
       message: "Not authorized",
     };
   }
-	
+
   return pet;
 }
 
